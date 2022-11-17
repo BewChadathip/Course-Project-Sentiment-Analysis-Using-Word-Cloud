@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <br>
+    <h2 class="F1">Sentiment Analysis Using World cloud</h2>
+    <form action="{{url_for('signupForm')}}" method="get">
+        <div class ="form-group">
+            <label class="F1" for="" >Keyworld or Hashtages</label>
+            <input type="text" name="keyworld" class="form-control">
+        </div>
+        <br>
+        <center>
+            <input class="F1 btn btn-success " type="submit" value="submit">
+        </center>
+    </form>
+</div>
+{% endblock %}
