@@ -5,6 +5,8 @@ import pymongo
 from pprint import pprint
 import numpy as np
 from wordcloud import WordCloud, STOPWORDS
+import pythainlp
+from pythainlp import word_tokenize
 
 #object of Flask
 app = Flask(__name__)
@@ -77,24 +79,26 @@ def twitterAPI(keyworld):
     user_cursor = tweet_collection.distinct("user.id")
     print(len(user_cursor))
 
-    document=[]
+    document= open("document.txt","w")
     for extract in tweet_cursor:
         try:
             print('-----')
             print('name:-',extract["user"]["name"])
             print('text:-',extract["full_text"])
             print('Created Date:-',extract["created_at"])
-            document.append(str(extract["full_text"]))
+            # document.append(str(extract["full_text"]))
+            document.write(str(extract["full_text"]))
         except:
             print("Error in Encoding")
             pass
     
-        
-    all_words = ' '.join(document).lower()
+    readfile= open("document.txt","r")
+    words = word_tokenize(readfile.read())
+    all_words = ' '.join(words).lower()
+    document.close
 
     stopwords = set(STOPWORDS)
-    stopwords.update(["RT", "https", "t", "s", "King Charles", "Charles III", "King Charles III",\
-        "king","charles", "king charles", "charles iii", "iii"])
+    stopwords.update(["RT", "https", "t", "s", "charles iii", "iii", "paulineblack", "co", "pauline", "paulineblackOBE", "amp", "obe", "black", "afor32977890", "de", "le"])
 
     x, y = np.ogrid[:300, :500]
 
@@ -102,7 +106,7 @@ def twitterAPI(keyworld):
     mask = 255 * mask.astype(int)
 
 #Creat word cloud
-    wc = WordCloud(background_color="black", repeat=True, mask=mask, stopwords=stopwords)
+    wc = WordCloud(font_path="/Users/bewchadathip/Documents/Sentiment Analysis Project.py/font_path/Fahkwang-Medium.ttf", regexp='[a-zA-Z0-9ก-๙]+', background_color="black", repeat=True, mask=mask, stopwords=stopwords,max_words=150)
     wc.generate(all_words)
     wc.to_file("/Users/bewchadathip/Documents/Sentiment Analysis Project.py/static/test.jpg")
 
